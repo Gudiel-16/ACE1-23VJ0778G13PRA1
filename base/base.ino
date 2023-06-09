@@ -2,6 +2,8 @@
 
 LedControl ledControl = LedControl(51, 53, 49, 1); // LedControl(DIN, CLK, CS / LOAD, # de dispositivos (cantidad de modulos) de 1 a 8)
 
+int velocidad = 200;
+
 //////////////////////////////////////////////////////////////  VARIABLES LETRERO  ////////////////////////////////////////////////////////////// 
 // PINES MATRIZ SIN DRIVER
 int filas[] = {24, 22, 2, 3, 4, 5, 6, 7}; // filas encienden con 0 (--> +y)
@@ -9,7 +11,6 @@ int columnas[] = {8, 9, 10, 11, 12, 13, 23, 25}; // columnas encienden con 1 (--
 
 int DIR_LEFT = 52, DIR_RIGHT = 50, K = 48, DISP = 46;
 boolean direccionLetrero = true; // true -> derecha
-int velocidadLetrero = 200;
 int posicionControlador = 123; // 116 + 8 tablero = 124 => 123 porque empieza en 0
 
 long int t0 = millis();
@@ -88,10 +89,10 @@ byte tableroJuego[8][16] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
-                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 }, \
-                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 }, \
-                             { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 }, \
-                             { 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 } };
+                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 byte tableroBalas[8][16] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
@@ -102,12 +103,25 @@ byte tableroBalas[8][16] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
+int tableroTorres[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } ;
+int puntajes[5] = { -1, -1, -1, -1, -1 } ;
+
 int xAvion = 0;
 int yAvion = 0;
-long int t00 = 0;
-long int t11 = 0;
+long int tAvion0 = 0; // velocidad avion, bala
+long int tAvion1 = 0; // velocidad avion, bala
+long int tAvionDesplazY0 = 0; // desplazamiento de avion (eje y)
+long int tAvionDesplazY1 = 0; // desplazamiento de avion (eje y)
+bool direccionAvion = true; // true -> derecha
+bool poderDisparar = true; // true -> puede disparar
+int nivelJuego = 1;
+int vidas = 3;
+int puntos = 0;
+bool construirNuevasTorres = true; // true -> construye torres
+int cantidadTorresPorDestruir = 3;
 
 void setup() {
+  Serial.begin(9600);
   inizializarMatrizSinDriver();
   inicializarMatrizDriver();
   pinMode(DIR_LEFT, INPUT); // DIRECCION IZQUIERDA
@@ -122,17 +136,17 @@ void loop() {
 //    direccionLetrero = !direccionLetrero;
 //  }
       
-//  delay(velocidadLetrero);
+//  delay(velocidad);
   
-  if (direccionLetrero == false) {
-    moverCartelIZQ();
-  } else  {
-    moverCartelDCH();
-  }
+//  if (direccionLetrero == false) {
+//    moverCartelIZQ();
+//  } else  {
+//    moverCartelDCH();
+//  }
 
 //  mostrarPunteo(1,4); // los muestra en -> (matriz sin driver, matriz con driver)
 
-//  jugar();
+  jugar();
 
 }
 
@@ -181,7 +195,7 @@ void moverCartelDCH() {
     }
 
     t1 = millis();
-    if(t1-t0 >= velocidadLetrero){
+    if(t1-t0 >= velocidad){
       posicionControlador--;
       t0 = millis();
     }
@@ -205,7 +219,7 @@ void moverCartelIZQ() {
     }
 
     t1 = millis();
-    if(t1-t0 >= velocidadLetrero){
+    if(t1-t0 >= velocidad){
       posicionControlador++;
       t0 = millis();
     }
@@ -287,37 +301,166 @@ void mostrarPuntuacion(int numero[8][8]) { // numero en matriz sin driver
 }
 
 ////////////////////////////////////////////////////////////// AVION ////////////////////////////////////////////////////////////// 
-void pintarAvion() {
-//    tableroJuego[yAvion][xAvion+2]   = 1;
-//    tableroJuego[yAvion+1][xAvion+2] = 1;
-//    tableroJuego[yAvion+1][xAvion+1] = 1;
-//    tableroJuego[yAvion+1][xAvion]   = 1;
-//
-    tableroJuego[yAvion][xAvion]     = 1;
-    tableroJuego[yAvion+1][xAvion]   = 1;
-    tableroJuego[yAvion+1][xAvion+1] = 1;
-//    tableroJuego[yAvion+2][xAvion+1] = 1; // bala
-    tableroJuego[yAvion+1][xAvion+2] = 1;
+
+void pintarAvionDirDerecha(){
+  
+  // DIBUJO AVION DERECHA
+  //[yAvion]                         [xAvion-2]
+  //[yAvion+1][yAvion+1][yAvion+1]   [xAvion-2][xAvion-1][xAvion]
+
+  if(xAvion < 18){ // parte final del avion
+    if((xAvion -2) >= 0) // asignar valores siempre que esten en el rango de la matriz
+    {
+      tableroJuego[yAvion][xAvion-2]     = 1;
+      tableroJuego[yAvion+1][xAvion-2]   = 1;
+    }
+  }
+
+  if(xAvion < 17){ // parte medio del avion
+    if((xAvion -1) >= 0) // asignar valores siempre que esten en el rango de la matriz
+    {
+      tableroJuego[yAvion+1][xAvion-1] = 1; 
+    }
+  }
+
+  if(xAvion < 16){ // trompa del avion
+    tableroJuego[yAvion+1][xAvion] = 1;    
+  }
+
 }
 
-void borrarAvion() {
-//    tableroJuego[yAvion][xAvion+2]   = 0;
-//    tableroJuego[yAvion+1][xAvion+2] = 0;
-//    tableroJuego[yAvion+1][xAvion+1] = 0;
-//    tableroJuego[yAvion+1][xAvion]   = 0;
-    tableroJuego[yAvion][xAvion]     = 0;
+void pintarAvionDirIzquierda() {
+
+  // DIBUJO AVION IZQUIERDA
+  //                      [yAvion]                     [xAvion+2]
+  //[yAvion+1][yAvion+1][yAvion+1]   [xAvion][xAvion+1][xAvion+2]
+
+  if(xAvion > -3){ // parte final del avion
+    if((xAvion + 2) <= 15){ // asignar valores siempre que esten en el rango de la matriz
+      tableroJuego[yAvion][xAvion+2]   = 1;
+      tableroJuego[yAvion+1][xAvion+2] = 1;
+    }
+  }
+
+  if(xAvion > -2){ // parte media del avion
+    if((xAvion + 1) <= 15){ // asignar valores siempre que esten en el rango de la matriz
+      tableroJuego[yAvion+1][xAvion+1] = 1;
+    }
+  }
+
+  if(xAvion > -1){ // trompa del avion
+    tableroJuego[yAvion+1][xAvion]   = 1;
+  }
+
+}
+
+void borrarAvionDirDerecha(){
+  
+  if(xAvion < 18){ // parte final del avion
+    if((xAvion -2) >= 0) // asignar valores siempre que esten en el rango de la matriz
+    {
+      tableroJuego[yAvion][xAvion-2]     = 0;
+      tableroJuego[yAvion+1][xAvion-2]   = 0;
+    }
+  }
+
+  if(xAvion < 17){ // parte media del avion
+    if((xAvion -1) >= 0) // asignar valores siempre que esten en el rango de la matriz
+    {
+      tableroJuego[yAvion+1][xAvion-1] = 0; 
+    }
+  }
+
+  if(xAvion < 16){ // trompa del avion
+    tableroJuego[yAvion+1][xAvion] = 0;    
+  }
+}
+
+void borrarAvionDirIzquierda() {
+
+  if(xAvion > -3){ // parte final del avion
+    if((xAvion + 2) <= 15){ // asignar valores siempre que esten en el rango de la matriz
+      tableroJuego[yAvion][xAvion+2]   = 0;
+      tableroJuego[yAvion+1][xAvion+2] = 0;
+    }
+  }
+
+  if(xAvion > -2){ // parte media del avion
+    if((xAvion + 1) <= 15){ // asignar valores siempre que esten en el rango de la matriz
+      tableroJuego[yAvion+1][xAvion+1] = 0;
+    }
+  }
+
+  if(xAvion > -1){ // trompa del avion
     tableroJuego[yAvion+1][xAvion]   = 0;
-    tableroJuego[yAvion+1][xAvion+1] = 0;
-    tableroJuego[yAvion+1][xAvion+2] = 0;
+  }
+
 }
 
 void pintarBala(){
-  tableroJuego[yAvion+2][xAvion+1] = 1;
-  
+  if(direccionAvion){ // avion va hacia derecha
+    if((xAvion - 1) >= 0 && xAvion <= 16){ // Dispara cuando la parte media esta dentro de la matriz 
+      tableroJuego[yAvion+2][xAvion-1] = 1;
+      tableroBalas[yAvion+2][xAvion-1] = 1; // guardamos posicion de bala en su tablero
+    }
+  }else{
+    if((xAvion + 1) <= 15 && xAvion >= -1){ // Dispara cuando la parte media esta dentro de la matriz
+      tableroJuego[yAvion+2][xAvion+1] = 1;
+      tableroBalas[yAvion+2][xAvion+1] = 1; // guardamos posicion de bala en su tablero
+    }
+  }  
 }
 
-void borrarBala(){
-  tableroJuego[yAvion+2][xAvion+1] = 0;
+void pintarNuevaPosicionBalas(){
+
+  // Recorremos matriz de balas, cuando encontramos una, solo la desplazamos hacia abajo
+  for (int i = 7; i > (yAvion+1); i--){
+    for (int j = 0; j < 16; j++){
+      if (tableroBalas[i][j] == 1){ // si hay bala
+
+        if(i == 7){ // cuando se este en la ultima fila de la matriz
+          if(tableroTorres[j] == 1) { // si hay torre
+
+            // torre destruida
+            tableroTorres[j] = 0; // quitamos torre
+            cantidadTorresPorDestruir--;
+
+            // punto
+            puntos++;
+            if(puntos % 5 == 0){
+              vidas++;
+              Serial.println("5 puntos, vida extra");
+            }
+
+            if(cantidadTorresPorDestruir == 0 ) { // siguiente nivel
+              Serial.println("Siguiente nivel");
+              nivelJuego++;
+              mostrarNivel();
+              construirNuevasTorres = true;
+              yAvion = 0; // reseteamos altura de avion
+              xAvion = 0;
+              tAvionDesplazY0 = millis(); // reseteamos tiempo para que se desplaze a los 2s nuevamente
+            }
+          }
+        } 
+
+        // borramos bala en posicion actual
+        tableroBalas[i][j] = 0;
+        tableroJuego[i][j] = 0;
+
+        // para que no haga el desplazamiento cuando este en la ultima fila de la matriz
+        if(i < 7){
+          tableroBalas[i+1][j] = 1;
+          tableroJuego[i+1][j] = 1;
+        }
+
+        // la bala ya esta en la ultima fila de la matriz
+        if(i == 7){ 
+          poderDisparar = true;
+        }        
+      }
+    }
+  }        
 }
 
 void mostrarMatriz() {
@@ -344,19 +487,243 @@ void pintarLED(int x, int y) {
 }
 
 void jugar() {
-  
-//  borrarBala();
-  borrarAvion();
-  t11 = millis();
-  if ((t11 - t00) >= 400) {
-      t00 = millis();
-      xAvion++;
+//  Serial.print(xAvion); 
+
+  // Cambia a direccion izquierda el avion
+  if (digitalRead(DIR_LEFT) == HIGH) {
+    borrarAvionDirDerecha();
+    direccionAvion = false;
   }
+
+  // Cambia a direccion derecha el avion
+  if (digitalRead(DIR_RIGHT) == HIGH) {
+    borrarAvionDirIzquierda();
+    direccionAvion = true;
+  }
+
+  if(direccionAvion) {    
+    jugarDirDerecha();  
+  } 
+  else {
+    jugarDirIzquierda();
+  }
+
+  if(construirNuevasTorres){
+    construirTorres();
+    construirNuevasTorres = false;
+  }
+  
+}
+
+void jugarDirDerecha(){
+  
+  borrarAvionDirDerecha(); 
+//  pintarNuevaPosicionBalas();
+  
+  // velocidad de avion y bala
+  tAvion1 = millis();
+  if ((tAvion1 - tAvion0) >= velocidad) {
+      pintarNuevaPosicionBalas();
+      tAvion0 = millis();
+      xAvion = (xAvion + 1) % 18; // 18: saldra dos pocisiones del lado derecho de la matriz, para hacer el efecto que va saliendo el avion
+  }
+  
+  desplazamientoAvionY();
+  verificarChoque();
+    
+  if (digitalRead(DISP) == HIGH) {
+    if(poderDisparar){
+      pintarBala();
+      poderDisparar = false;
+    }
+  }
+  
+  pintarAvionDirDerecha();   
+  mostrarMatriz();
+
+}
+
+void jugarDirIzquierda(){
+  
+  borrarAvionDirIzquierda(); 
+//  pintarNuevaPosicionBalas();
+
+  // velocidad de avion y bala
+  tAvion1 = millis();
+  if ((tAvion1 - tAvion0) >= velocidad) {
+      pintarNuevaPosicionBalas();
+      tAvion0 = millis();
+      xAvion--;
+      if(xAvion < -2) { // -2: saldra dos pocisiones del lado izquierdo de la matriz, para hacer el efecto que va saliendo el avion
+        xAvion = 15;
+      }
+  }
+
+  desplazamientoAvionY();
+  verificarChoque();
   
   if (digitalRead(DISP) == HIGH) {
-    pintarBala();
+    if(poderDisparar){
+      pintarBala();
+      poderDisparar = false;
+    }
   }
- 
-  pintarAvion();    
+  
+  pintarAvionDirIzquierda();   
   mostrarMatriz();
+}
+
+void desplazamientoAvionY(){
+  tAvionDesplazY1 = millis();
+  if ((tAvionDesplazY1 - tAvionDesplazY0) >= 2000) { // se desplaza cada 2 segundos
+    tAvionDesplazY0 = millis();
+    yAvion++;
+  }
+  
+  if(yAvion == 7){ // llego a la parte baja del tablero
+    avionLlegoAlFinal();
+  }
+}
+
+void construirTorres(){
+
+  for(int i = 0; i < 16; i++){
+    tableroTorres[i] = 0; // reseteamos
+  }
+  
+  cantidadTorresPorDestruir = nivelJuego + 2;
+  for(int i = 0; i < (nivelJuego + 2); i++){
+    int posicionTorreEnTablero = random(0, 16); // (min, max-1)
+    int alturaTorre = random(1, 5); // (min, max-1)
+
+    if(tableroTorres[posicionTorreEnTablero] != 1){ // aun no hay torre en esa posicion (ya que random las genera en la misma posicion aveces)
+      
+      tableroTorres[posicionTorreEnTablero] = 1; // con 1 indicamos que hay torre en esa posicion
+//      Serial.println(posicionTorreEnTablero);
+  
+      for(int j = 0; j < 16; j++){ // recorreo matriz de forma horizontal
+        if(j == posicionTorreEnTablero){
+          for(int k = 0; k < alturaTorre; k++){ // recorro para formar altura de torre
+            tableroJuego[7-k][posicionTorreEnTablero] = 1; // [pintando para arriba][columna]
+          }
+        }
+      } 
+    }else {
+      i--;  // para que calcule otro random 
+    }
+  }
+}
+
+void verificarChoque(){
+
+  if(direccionAvion){
+    
+    if(xAvion < 18){ // parte final del avion
+      if((xAvion -2) >= 0) // asignar valores siempre que esten en el rango de la matriz
+      {
+        if(tableroJuego[yAvion][xAvion-2] == 1 || tableroJuego[yAvion+1][xAvion-2] == 1){
+          Serial.println("choque parte final del avion");
+          
+        }
+      }
+    }
+  
+    if(xAvion < 17){ // parte medio del avion
+      if((xAvion -1) >= 0) // asignar valores siempre que esten en el rango de la matriz
+      {
+        if(tableroJuego[yAvion+1][xAvion-1] == 1){
+          Serial.println("choque parte medio del avion");
+          avionChoco();
+        }
+      }
+    }
+  
+    if(xAvion < 16){ // trompa del avion
+      if(tableroJuego[yAvion+1][xAvion] == 1){
+          Serial.println("choque trompa del avion");
+          avionChoco();
+      }
+    }
+  }else {
+    if(xAvion > -3){ // parte final del avion
+      if((xAvion + 2) <= 15){ // asignar valores siempre que esten en el rango de la matriz
+        if(tableroJuego[yAvion][xAvion+2] == 1 || tableroJuego[yAvion+1][xAvion+2] == 1){
+          Serial.println("choque parte final del avion");
+          avionChoco();
+        }
+      }
+    }
+  
+    if(xAvion > -2){ // parte media del avion
+      if((xAvion + 1) <= 15){ // asignar valores siempre que esten en el rango de la matriz
+        if(tableroJuego[yAvion+1][xAvion+1] == 1){
+          Serial.println("choque parte medio del avion");
+          avionChoco();
+        }        
+      }
+    }
+  
+    if(xAvion > -1){ // trompa del avion
+      if(tableroJuego[yAvion+1][xAvion] == 1){
+        Serial.println("choque trompa del avion");
+        avionChoco();
+      }
+    }
+  }
+}
+
+void avionChoco(){
+  vidas--;
+  if(vidas == 0){
+    puntos = 0; // reseteamos puntos
+    Serial.println("Sin vidas"); // MOSTRAR MENSAJE INICIAL
+  }else{
+    yAvion = yAvion - 2;
+  }
+}
+
+void avionLlegoAlFinal(){ // es ejecutado desde el metodo desplazamientoAvionY, cuando llega hasta abajo del tablero
+  vidas--;
+  if(vidas == 0){
+    puntos = 0; // reseteamos puntos
+    Serial.println("Sin vidas"); // MOSTRAR MENSAJE INICIAL
+  }else{
+    yAvion = yAvion - 3;
+  }
+}
+
+void mostrarNivel() { // Mostrar nivel por 2 segundos
+
+  unsigned long tiempo1 = millis();
+  unsigned long tiempo2 = millis();
+
+  while (true) {
+    Serial.println(nivelJuego); // aca mostrar numero
+    tiempo1 = millis();
+    if (tiempo1 >= (tiempo2 + 2000)) {
+      tiempo1 = 0;
+      break;
+    }
+  }
+}
+
+void guardarPuntaje(){
+  // [posVieja,x,x,x,PosNueva]
+  bool flatArrayLleno = true;
+  for(int i = 0; i < 5; i++){ // recorremos array puntaje
+    if(puntajes[i] == -1){ // no hay anda en esa posicion
+      puntajes[i] = puntos;
+      filaArrayLleno = false;
+      break;
+    }
+  }
+
+  if(flatArrayLleno){ // array lleno, hay que desplazar posiciones y guardar el punteo nuevo
+    for(int i = 0; i < 4; i++){
+      puntajes[i] = puntajes[i+1];
+    }
+    puntajes[0] = puntos;
+  }
+
+  
 }
