@@ -319,6 +319,17 @@ void encenderMatriz(int inicio, int fin)
 }
 
 //////////////////////////////////////////////////////////////  PUNTUACION //////////////////////////////////////////////////////////////
+int numeros[] = {numero0, numero1, numero2, numero3, numero4};
+void imprimirPuntuacion(int punteo) {
+  if(punteo<10) {
+    escribirBuffer(numeros[punteo]);
+    mostrarCualquierMatriz(bufferPunteo);
+  } else {
+    int pt1 = punteo/10;
+    int pt2 = punteo%10;
+    mostrarPunteo(pt2, pt1);
+  }
+}
 
 void mostrarPunteo(int punteo1, int punteo2)
 {
@@ -1266,7 +1277,8 @@ void setup()
 
 void loop()
 {
-    MenuPrincipal();
+    //MenuPrincipal();
     // jugar();
     // configuracion();
+    imprimirPuntuacion(14);
 }
