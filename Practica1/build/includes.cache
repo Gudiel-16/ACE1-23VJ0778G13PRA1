@@ -10,12 +10,12 @@
     "Includepath": "C:\\Users\\GustavoXD\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.6\\variants\\mega"
   },
   {
-    "Sourcefile": "G:\\Archivos\\Escritorio\\Ingenieria\\Junio 2023\\Arqui 1\\P1-ARQUI1-BACKUP\\Practica1\\build\\sketch\\Practica1.ino.cpp",
+    "Sourcefile": "G:\\Archivos\\Escritorio\\Ingenieria\\Junio 2023\\Arqui 1\\ACE1-23VJ0778G13PRA1\\Practica1\\build\\sketch\\Practica1.ino.cpp",
     "Include": "LedControl.h",
     "Includepath": "G:\\Archivos\\Documentos\\Arduino\\libraries\\LedControl\\src"
   },
   {
-    "Sourcefile": "G:\\Archivos\\Escritorio\\Ingenieria\\Junio 2023\\Arqui 1\\P1-ARQUI1-BACKUP\\Practica1\\build\\sketch\\Practica1.ino.cpp",
+    "Sourcefile": "G:\\Archivos\\Escritorio\\Ingenieria\\Junio 2023\\Arqui 1\\ACE1-23VJ0778G13PRA1\\Practica1\\build\\sketch\\Practica1.ino.cpp",
     "Include": "",
     "Includepath": null
   },

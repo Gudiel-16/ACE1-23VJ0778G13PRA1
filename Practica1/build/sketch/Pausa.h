@@ -1,39 +1,7 @@
-#line 1 "G:\\Archivos\\Escritorio\\Ingenieria\\Junio 2023\\Arqui 1\\P1-ARQUI1-BACKUP\\Practica1\\Pausa.h"
+#line 1 "G:\\Archivos\\Escritorio\\Ingenieria\\Junio 2023\\Arqui 1\\ACE1-23VJ0778G13PRA1\\Practica1\\Pausa.h"
 #ifndef PAUSA
 #define PAUSA
 #include "Funciones.h"
 
-byte PausaXd[8][16] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                         {0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-                         {0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-                         {0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-                         {0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-                         {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                         {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
-void MenuPausa()
-{
-    mostrarMatriz(PausaXd);
-    if (digitalRead(K) == LOW)
-        {
-            delay(1000);
-            Serial.println("1s");
-            if (digitalRead(K) == LOW)
-            {
-                delay(1000);
-                Serial.println("2s");
-                estadoActual = JUGAR;
-                if (digitalRead(K) == LOW)
-                {
-                    delay(1000);
-                    Serial.println("3s");
-                    if (digitalRead(K) == LOW)
-                    {
-                        estadoActual = MENU_PRINCIPAL;
-                    }
-                }
-            }
-        }
-}
 #endif

@@ -1,5 +1,5 @@
-G:\Archivos\Escritorio\Ingenieria\Junio\ 2023\Arqui\ 1\P1-ARQUI1-BACKUP\Practica1\build\sketch\Practica1.ino.cpp.o: \
- G:\Archivos\Escritorio\Ingenieria\Junio\ 2023\Arqui\ 1\P1-ARQUI1-BACKUP\Practica1\build\sketch\Practica1.ino.cpp \
+G:\Archivos\Escritorio\Ingenieria\Junio\ 2023\Arqui\ 1\ACE1-23VJ0778G13PRA1\Practica1\build\sketch\Practica1.ino.cpp.o: \
+ G:\Archivos\Escritorio\Ingenieria\Junio\ 2023\Arqui\ 1\ACE1-23VJ0778G13PRA1\Practica1\build\sketch\Practica1.ino.cpp \
  C:\Users\GustavoXD\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6\cores\arduino/Arduino.h \
  C:\Users\GustavoXD\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6\cores\arduino/binary.h \
  C:\Users\GustavoXD\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6\cores\arduino/WCharacter.h \
@@ -11,7 +11,7 @@ G:\Archivos\Escritorio\Ingenieria\Junio\ 2023\Arqui\ 1\P1-ARQUI1-BACKUP\Practica
  C:\Users\GustavoXD\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6\cores\arduino/USBAPI.h \
  C:\Users\GustavoXD\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6\cores\arduino/Arduino.h \
  C:\Users\GustavoXD\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.6\variants\mega/pins_arduino.h \
- G:\Archivos\Escritorio\Ingenieria\Junio\ 2023\Arqui\ 1\P1-ARQUI1-BACKUP\Practica1\build\sketch\Funciones.h \
+ G:\Archivos\Escritorio\Ingenieria\Junio\ 2023\Arqui\ 1\ACE1-23VJ0778G13PRA1\Practica1\build\sketch\Funciones.h \
  G:\Archivos\Documentos\Arduino\libraries\LedControl\src/LedControl.h \
- G:\Archivos\Escritorio\Ingenieria\Junio\ 2023\Arqui\ 1\P1-ARQUI1-BACKUP\Practica1\build\sketch\MenuPrincipal.h \
- G:\Archivos\Escritorio\Ingenieria\Junio\ 2023\Arqui\ 1\P1-ARQUI1-BACKUP\Practica1\build\sketch\Pausa.h
+ G:\Archivos\Escritorio\Ingenieria\Junio\ 2023\Arqui\ 1\ACE1-23VJ0778G13PRA1\Practica1\build\sketch\MenuPrincipal.h \
+ G:\Archivos\Escritorio\Ingenieria\Junio\ 2023\Arqui\ 1\ACE1-23VJ0778G13PRA1\Practica1\build\sketch\Pausa.h
