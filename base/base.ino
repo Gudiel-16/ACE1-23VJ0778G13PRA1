@@ -129,6 +129,17 @@ byte bufferPunteo[8][16] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
                              { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
+//////////////////////////////////////////////////////////////  VARIABLES ESTADISTICAS  ////////////////////////////////////////////////////////////// 
+
+byte tableroEstadisticas[8][16] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                                   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                                   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                                   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                                   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                                   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                                   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                                   { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+
 void setup() {
   Serial.begin(9600);
   inizializarMatrizSinDriver();
@@ -140,6 +151,14 @@ void setup() {
 }
 
 void loop() {
+
+//  float var = 2.49;
+//  int var2 = round(var);
+//  float var3 = 2.51;
+//  int var4 = round(var3;
+//  Serial.println(var < 2 ? "true": "false");
+//  Serial.println(var4);
+//  Serial.println("************");
 
 //  if (digitalRead(DISP) == HIGH) {
 //    direccionLetrero = !direccionLetrero;
@@ -160,6 +179,9 @@ void loop() {
 
   escribirBuffer(numero2);
   mostrarCualquierMatriz(bufferPunteo);
+
+//  visualizarEstadisticas();
+
 
 }
 
@@ -639,9 +661,14 @@ void construirTorres(){
   for(int i = 0; i < 16; i++){
     tableroTorres[i] = 0; // reseteamos
   }
-  
+
   cantidadTorresPorDestruir = nivelJuego + 2;
-  for(int i = 0; i < (nivelJuego + 2); i++){
+
+  if (cantidadTorresPorDestruir > 16){ // la cantidadmaxima de torres a generar es de 16 (0 al 15)
+    cantidadTorresPorDestruir = 16;
+  }
+  
+  for(int i = 0; i < cantidadTorresPorDestruir; i++){
     int posicionTorreEnTablero = random(0, 16); // (min, max-1)
     int alturaTorre = random(1, 5); // (min, max-1)
 
@@ -724,8 +751,9 @@ void verificarChoque(){
 void avionChoco(){
   vidas--;
   if(vidas == 0){
-    puntos = 0; // reseteamos puntos
-    Serial.println("Sin vidas"); // MOSTRAR MENSAJE INICIAL
+    guardarPuntaje();
+    resetCuandoNoHayVidas();
+//    Serial.println("Sin vidas"); // MOSTRAR MENSAJE INICIAL
   }else{
     yAvion = yAvion - 2;
   }
@@ -734,11 +762,20 @@ void avionChoco(){
 void avionLlegoAlFinal(){ // es ejecutado desde el metodo desplazamientoAvionY, cuando llega hasta abajo del tablero
   vidas--;
   if(vidas == 0){
-    puntos = 0; // reseteamos puntos
-    Serial.println("Sin vidas"); // MOSTRAR MENSAJE INICIAL
+    guardarPuntaje();
+    resetCuandoNoHayVidas();
+//    Serial.println("Sin vidas"); // MOSTRAR MENSAJE INICIAL
   }else{
     yAvion = yAvion - 3;
   }
+}
+
+void resetCuandoNoHayVidas(){
+  puntos = 0;
+  vidas = 3;
+  xAvion = 0;
+  yAvion = 0;
+  nivelJuego = 1;
 }
 
 void mostrarNivel() { // Mostrar nivel por 2 segundos
@@ -747,7 +784,7 @@ void mostrarNivel() { // Mostrar nivel por 2 segundos
   unsigned long tiempo2 = millis();
 
   while (true) {
-    Serial.println(nivelJuego); // aca mostrar numero
+//    Serial.println(nivelJuego); // aca mostrar numero
     tiempo1 = millis();
     if (tiempo1 >= (tiempo2 + 2000)) {
       tiempo1 = 0;
@@ -760,7 +797,7 @@ void guardarPuntaje(){
   // [posVieja,x,x,x,PosNueva]
   bool flatArrayLleno = true;
   for(int i = 0; i < 5; i++){ // recorremos array puntaje
-    if(puntajes[i] == -1){ // no hay anda en esa posicion
+    if(puntajes[i] == -1){ // no hay nada en esa posicion
       puntajes[i] = puntos;
       flatArrayLleno = false;
       break;
@@ -771,10 +808,99 @@ void guardarPuntaje(){
     for(int i = 0; i < 4; i++){
       puntajes[i] = puntajes[i+1];
     }
-    puntajes[0] = puntos;
+    puntajes[4] = puntos;
   }
 
-  
+  Serial.println("PUNTAJES");
+  for(int i = 0; i < 5; i++){
+    Serial.println(puntajes[i]);
+  }  
+}
+
+void visualizarEstadisticas(){
+  // limpiando matriz
+  for(int i = 0; i < 8; i++){
+    for(int j = 0; j < 16; j++){
+        tableroEstadisticas[i][j] = 0;
+    }
+  }
+
+  float promedio = 0;
+  float valores[5] = { 0, 0, 0, 0, 0 };
+  int alturaBarra[5] = { 0, 0, 0, 0, 0 };
+
+  // calculado promedio
+  for(int i = 0; i < 5; i++){
+    if(puntajes[i] > -1){
+      promedio = promedio + (float)puntajes[i];
+    }
+  }
+
+  // valores para altura de cada barra de grafica
+  for(int i = 0; i < 5; i++){
+    if(puntajes[i] > -1){
+      valores[i] = ((float)puntajes[i] / promedio) * 8;
+    }    
+  }
+
+  // redondeando valores
+  for(int i = 0; i < 5; i++){
+    if(valores[i] > 0 && valores[i] <= 1){
+      alturaBarra[i] = 1; 
+    }
+    else if(valores[i] > 1 && valores[i] <= 2){
+      alturaBarra[i] = 2; 
+    }
+    else if(valores[i] > 2 && valores[i] <= 3){
+      alturaBarra[i] = 3; 
+    }
+    else if(valores[i] > 3 && valores[i] <= 4){
+      alturaBarra[i] = 4; 
+    }
+    else if(valores[i] > 4 && valores[i] <= 5){
+      alturaBarra[i] = 5; 
+    }
+    else if(valores[i] > 5 && valores[i] <= 6){
+      alturaBarra[i] = 6; 
+    }
+    else if(valores[i] > 6 && valores[i] <= 7){
+      alturaBarra[i] = 7; 
+    }
+    else if(valores[i] > 7 && valores[i] <= 8){
+      alturaBarra[i] = 8; 
+    }
+    else{
+      alturaBarra[i] = 0; 
+    }
+  }
+
+  // pintando en matriz
+  for(int i = 0; i < 5; i++){
+      if(alturaBarra[i] > 0){
+        for(int j = 0; j < alturaBarra[i]; j++){
+          int desplazamientoEjex = i * 3;
+          tableroEstadisticas[7-j][desplazamientoEjex+1] = 1;
+          tableroEstadisticas[7-j][desplazamientoEjex+2] = 1;
+        }
+      }
+  }
+
+  mostrarMatrizEstadistica();
+}
+
+void mostrarMatrizEstadistica() {
+    // Con driver
+    for (int i = 0; i < 8; i++)
+        for (int j = 0; j < 8; j++)
+            ledControl.setLed(0, i, j, tableroEstadisticas[i][j] == 1 ? true : false);
+    // Sin driver
+    for (int k = 0; k < 3; k++)
+        for (int i = 0; i < 8; i++)
+            for (int j = 8; j < 16; j++)
+                if (tableroEstadisticas[i][j] == 1)
+                    pintarLED(j - 8, i);
+                else
+                    delayMicroseconds(50);
 }
 
 ////////////////////////////////////////////////////////////// CONFIGURACION //////////////////////////////////////////////////////////////
