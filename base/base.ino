@@ -120,6 +120,15 @@ int puntos = 0;
 bool construirNuevasTorres = true; // true -> construye torres
 int cantidadTorresPorDestruir = 3;
 
+byte bufferPunteo[8][16] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, \
+                             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+
 void setup() {
   Serial.begin(9600);
   inizializarMatrizSinDriver();
@@ -146,7 +155,11 @@ void loop() {
 
 //  mostrarPunteo(1,4); // los muestra en -> (matriz sin driver, matriz con driver)
 
-  jugar();
+  //jugar();
+  //configuracion();
+
+  escribirBuffer(numero2);
+  mostrarCualquierMatriz(bufferPunteo);
 
 }
 
@@ -298,6 +311,42 @@ void mostrarPuntuacion(int numero[8][8]) { // numero en matriz sin driver
       digitalWrite(filas[j], HIGH);
     }
   }
+}
+
+
+
+void escribirBuffer(int numero[8][8]) {
+  reiniciarBufferPunteo();
+  for (int i = 0; i<8; i++) {
+    for (int j=0; j<8; j++) {
+      if (numero[i][j] == 1) {
+        bufferPunteo[i][j+4] = 1;
+      }
+    }
+  }
+}
+
+void reiniciarBufferPunteo() {
+  for (int i=0; i<8; i++) {
+    for (int j=0; j<16; j++) {
+      bufferPunteo[i][j] = 0;
+    }
+  }
+}
+
+void mostrarCualquierMatriz(byte matriz[8][16]) {
+    // Con driver
+    for (int i = 0; i < 8; i++)
+        for (int j = 0; j < 8; j++)
+            ledControl.setLed(0, i, j, matriz[i][j] == 1 ? true : false);
+    // Sin driver
+    for (int k = 0; k < 3; k++)
+        for (int i = 0; i < 8; i++)
+            for (int j = 8; j < 16; j++)
+                if (matriz[i][j] == 1)
+                    pintarLED(j - 8, i);
+                else
+                    delayMicroseconds(50);
 }
 
 ////////////////////////////////////////////////////////////// AVION ////////////////////////////////////////////////////////////// 
@@ -713,7 +762,7 @@ void guardarPuntaje(){
   for(int i = 0; i < 5; i++){ // recorremos array puntaje
     if(puntajes[i] == -1){ // no hay anda en esa posicion
       puntajes[i] = puntos;
-      filaArrayLleno = false;
+      flatArrayLleno = false;
       break;
     }
   }
@@ -726,4 +775,37 @@ void guardarPuntaje(){
   }
 
   
+}
+
+////////////////////////////////////////////////////////////// CONFIGURACION //////////////////////////////////////////////////////////////
+int potenciometroIzq = 0;
+int potenciometroDer = 0;
+
+void pintarBarra(int posicionY, int longitudX){
+  for(int i=0; i<10; i++){
+    if(i<=4){
+      ledControl.setLed(0, posicionY, i+3, i<longitudX? true : false);
+      ledControl.setLed(0, posicionY+1, i+3, i<longitudX? true : false);
+    } else {
+      if(i<longitudX){
+        pintarLED(i-5, posicionY);
+        pintarLED(i-5, posicionY+1);
+      }
+      else
+        delayMicroseconds(50);
+    }
+  }
+}
+
+void configuracion() {
+  // DIFICULTAD-VELOCIDAD
+  // mapear los valores del potenciometro en un rango de numero del 1 al 10
+  potenciometroIzq = map(analogRead(A0), 0, 1024, 1, 11);
+  //VIDAS
+  // mapear los valores del potenciometro en un rango de numero del 3 al 10
+  potenciometroDer = map(analogRead(A1), 0, 1024, 3, 11);
+  vidas = potenciometroDer;
+
+  pintarBarra(1, potenciometroIzq);
+  pintarBarra(5, potenciometroDer);
 }
