@@ -1,0 +1,8 @@
+#line 1 "G:\\Archivos\\Escritorio\\Ingenieria\\Junio 2023\\Arqui 1\\P1-ARQUI1-BACKUP\\Practica1\\.vscode\\arduino.json"
+{
+    "sketch": "Practica1.ino",
+    "output": "build",
+    "configuration": "cpu=atmega2560",
+    "board": "arduino:avr:mega",
+    "programmer": "avrispmkii"
+}

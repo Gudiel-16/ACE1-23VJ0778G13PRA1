@@ -1,0 +1,7 @@
+{
+    "sketch": "Practica1.ino",
+    "output": "build",
+    "configuration": "cpu=atmega2560",
+    "board": "arduino:avr:mega",
+    "programmer": "avrispmkii"
+}
