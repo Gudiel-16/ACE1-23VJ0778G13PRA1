@@ -922,6 +922,7 @@ void avionChoco()
         guardarPuntaje();
         resetCuandoNoHayVidas();
         estadoActual = MENSAJE;
+        nuevaPartida = true; // como regresara al manu principal, cuando vueva a jugar iniciara en el nivel 1
     }
     else
     {
@@ -937,6 +938,7 @@ void avionLlegoAlFinal()
         guardarPuntaje();
         resetCuandoNoHayVidas();
         estadoActual = MENSAJE;
+        nuevaPartida = true; // como regresara al manu principal, cuando vueva a jugar iniciara en el nivel 1
     }
     else
     {
