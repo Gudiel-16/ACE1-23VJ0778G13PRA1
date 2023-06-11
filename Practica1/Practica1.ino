@@ -20,6 +20,7 @@ String letrero[8]{
     "01000010100100100010000010010100100000010000100101000010010010000001010100100101000010010000000101000100010001000100",
     "01000010010100100010000001100111100000011110111101111001100001000001010010111101000011110000001000101110111011101000",
     "01000000000000000000000000000000000000000000000000000000000000011110000000000000000000000000000000000000000000000000"};
+    
 byte buffer[8][16] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -40,59 +41,49 @@ byte Mensajexd[8][16] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 
 //////////////////////////////////////////////////////////////  VARIABLES MOSTRAR NUMEROS //////////////////////////////////////////////////////////////
 
-// PUNTUACION MATRIZ SIN DRIVER (cada matriz forma un numero, solo estan del 0 al 4)
-int numero0[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 1, 1, 0, 0, 0},
-                     {0, 0, 1, 0, 0, 1, 0, 0},
-                     {0, 0, 1, 0, 0, 1, 0, 0},
-                     {0, 0, 1, 0, 0, 1, 0, 0},
-                     {0, 0, 1, 0, 0, 1, 0, 0},
-                     {0, 0, 0, 1, 1, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0}};
+// PUNTUACION MATRIZ SIN DRIVER (cada matriz forma un numero)
+int numero0[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 1, 1, 0, 0, 0}, {0, 0, 1, 0, 0, 1, 0, 0}, {0, 0, 1, 0, 0, 1, 0, 0},
+                     {0, 0, 1, 0, 0, 1, 0, 0}, {0, 0, 1, 0, 0, 1, 0, 0}, {0, 0, 0, 1, 1, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}};
 
-int numero1[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 1, 1, 0, 0},
-                     {0, 0, 0, 1, 0, 1, 0, 0},
-                     {0, 0, 1, 0, 0, 1, 0, 0},
-                     {0, 0, 0, 0, 0, 1, 0, 0},
-                     {0, 0, 0, 0, 0, 1, 0, 0},
-                     {0, 0, 0, 0, 0, 1, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0}};
+int numero1[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 1, 1, 0, 0}, {0, 0, 0, 1, 0, 1, 0, 0}, {0, 0, 1, 0, 0, 1, 0, 0},
+                     {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}};
 
-int numero2[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 1, 1, 0, 0, 0},
-                     {0, 0, 1, 0, 0, 1, 0, 0},
-                     {0, 0, 0, 0, 0, 1, 0, 0},
-                     {0, 0, 0, 0, 1, 0, 0, 0},
-                     {0, 0, 0, 1, 0, 0, 0, 0},
-                     {0, 0, 1, 1, 1, 1, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0}};
+int numero2[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 1, 1, 0, 0, 0}, {0, 0, 1, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 1, 0, 0},
+                     {0, 0, 0, 0, 1, 0, 0, 0}, {0, 0, 0, 1, 0, 0, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}};
 
-int numero3[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 1, 1, 1, 1, 0, 0},
-                     {0, 0, 0, 0, 0, 1, 0, 0},
-                     {0, 0, 0, 0, 1, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 1, 0, 0},
-                     {0, 0, 1, 0, 0, 1, 0, 0},
-                     {0, 0, 0, 1, 1, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0}};
+int numero3[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 1, 0, 0, 0},
+                     {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 1, 0, 0, 1, 0, 0}, {0, 0, 0, 1, 1, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}};
 
-int numero4[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 1, 1, 0, 0},
-                     {0, 0, 0, 1, 0, 1, 0, 0},
-                     {0, 0, 1, 0, 0, 1, 0, 0},
-                     {0, 0, 1, 1, 1, 1, 1, 0},
-                     {0, 0, 0, 0, 0, 1, 0, 0},
-                     {0, 0, 0, 0, 0, 1, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0}};
+int numero4[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 1, 1, 0, 0}, {0, 0, 0, 1, 0, 1, 0, 0}, {0, 0, 1, 0, 0, 1, 0, 0},
+                     {0, 0, 1, 1, 1, 1, 1, 0}, {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}};
 
-// PUNTUACION MATRIZ CON DRIVER (Cada fila forma un numero, solo estan del 0 al 4)
-byte puntuacion[5][8]{
+int numero5[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 1, 0, 0, 0, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0},
+                     {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}};
+
+int numero6[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 1, 0, 0, 0, 0, 0}, {0, 0, 1, 0, 0, 0, 0, 0},
+                     {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 1, 0, 0, 1, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}};
+
+int numero7[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0},
+                     {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}};
+
+int numero8[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 1, 0, 0, 1, 0, 0}, {0, 0, 1, 0, 0, 1, 0, 0},
+                     {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 1, 0, 0, 1, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}};
+
+int numero9[8][8] = {{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 1, 0, 0, 1, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0},
+                     {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 1, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}};
+
+// PUNTUACION MATRIZ CON DRIVER (Cada fila forma un numero)
+byte puntuacion[10][8]{
     {B00000000, B00011000, B00100100, B00100100, B00100100, B00100100, B00011000, B00000000}, // 0
     {B00000000, B00001100, B00010100, B00100100, B00000100, B00000100, B00000100, B00000000}, // 1
     {B00000000, B00011000, B00100100, B00000100, B00001000, B00010000, B00111100, B00000000}, // 2
     {B00000000, B00111100, B00000100, B00001000, B00000100, B00100100, B00011000, B00000000}, // 3
-    {B00000000, B00001100, B00010100, B00100100, B00111110, B00000100, B00000100, B00000000}  // 4
+    {B00000000, B00001100, B00010100, B00100100, B00111110, B00000100, B00000100, B00000000}, // 4
+    {B00000000, B00111100, B00100000, B00111100, B00000100, B00000100, B00111100, B00000000}, // 5
+    {B00000000, B00111100, B00100000, B00100000, B00111100, B00100100, B00111100, B00000000}, // 6
+    {B00000000, B00111100, B00000100, B00111100, B00000100, B00000100, B00000100, B00000000}, // 7
+    {B00000000, B00111100, B00100100, B00100100, B00111100, B00100100, B00111100, B00000000}, // 8
+    {B00000000, B00111100, B00100100, B00111100, B00000100, B00000100, B00111100, B00000000}  // 9
 };
 
 //////////////////////////////////////////////////////////////  VARIABLES LOGICA AVION  //////////////////////////////////////////////////////////////
@@ -130,6 +121,7 @@ int vidas = 3;
 int puntos = 0;
 bool construirNuevasTorres = true; // true -> construye torres
 int cantidadTorresPorDestruir = 3;
+bool nuevaPartida = true;
 
 byte bufferPunteo[8][16] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -319,7 +311,8 @@ void encenderMatriz(int inicio, int fin)
 }
 
 //////////////////////////////////////////////////////////////  PUNTUACION //////////////////////////////////////////////////////////////
-int numeros[] = {numero0, numero1, numero2, numero3, numero4};
+int numeros[] = {numero0, numero1, numero2, numero3, numero4, numero5, numero6, numero7, numero8, numero9};
+
 void imprimirPuntuacion(int punteo) {
   if(punteo<10) {
     escribirBuffer(numeros[punteo]);
@@ -362,6 +355,26 @@ void mostrarPunteo(int punteo1, int punteo2)
         else if (punteo1 == 4)
         {
             mostrarPuntuacion(numero4);
+        }
+        else if (punteo1 == 5)
+        {
+            mostrarPuntuacion(numero5);
+        }
+        else if (punteo1 == 6)
+        {
+            mostrarPuntuacion(numero6);
+        }
+        else if (punteo1 == 7)
+        {
+            mostrarPuntuacion(numero7);
+        }
+        else if (punteo1 == 8)
+        {
+            mostrarPuntuacion(numero8);
+        }
+        else if (punteo1 == 9)
+        {
+            mostrarPuntuacion(numero9);
         }
     }
 
@@ -590,12 +603,12 @@ void pintarNuevaPosicionBalas()
                         if (puntos % 5 == 0)
                         {
                             vidas++;
-                            Serial.println("5 puntos, vida extra");
+                            Serial.println("VIDA EXTRA");
                         }
 
                         if (cantidadTorresPorDestruir == 0)
-                        { // siguiente nivel
-                            Serial.println("Siguiente nivel");
+                        { 
+                            // Serial.println("Siguiente nivel");
                             nivelJuego++;
                             mostrarNivel();
                             construirNuevasTorres = true;
@@ -645,6 +658,18 @@ void mostrarMatriz()
 void jugar()
 {
     //  Serial.print(xAvion);
+    if(nuevaPartida){
+      xAvion = 0;
+      yAvion = 0;
+      nivelJuego = 1;
+      mostrarNivel();
+      tAvionDesplazY0 = millis();
+      nuevaPartida = false;
+      construirNuevasTorres = true;
+      poderDisparar = true;
+      cantidadTorresPorDestruir = 3;
+      limpiarTableros();
+    }
 
     // Cambia a direccion izquierda el avion
     if (digitalRead(DIR_LEFT) == LOW)
@@ -674,6 +699,19 @@ void jugar()
         construirTorres();
         construirNuevasTorres = false;
     }
+}
+
+void limpiarTableros(){
+  for(int i = 0; i < 8; i++){
+    for(int j = 0; j < 16; j++){
+      tableroJuego[i][j] = 0;
+      tableroBalas[i][j] = 0;
+    }
+  }
+
+  for(int i = 0; i < 16; i++){
+    tableroTorres[i] = 0;
+  }
 }
 
 void jugarDirDerecha()
@@ -883,11 +921,11 @@ void avionChoco()
     {
         guardarPuntaje();
         resetCuandoNoHayVidas();
-        //    Serial.println("Sin vidas"); // MOSTRAR MENSAJE INICIAL
+        estadoActual = MENSAJE;
     }
     else
     {
-        yAvion = yAvion - 2;
+        yAvion = (yAvion - 2) < 0 ? 0 : (yAvion - 2); // se valida para que el avion no se salga de la parte superior del tablero
     }
 }
 
@@ -898,11 +936,11 @@ void avionLlegoAlFinal()
     {
         guardarPuntaje();
         resetCuandoNoHayVidas();
-        //    Serial.println("Sin vidas"); // MOSTRAR MENSAJE INICIAL
+        estadoActual = MENSAJE;
     }
     else
     {
-        yAvion = yAvion - 3;
+        yAvion = (yAvion - 3) < 0 ? 0 : (yAvion - 3);;
     }
 }
 
@@ -923,7 +961,7 @@ void mostrarNivel()
 
     while (true)
     {
-        //    Serial.println(nivelJuego); // aca mostrar numero
+        imprimirPuntuacion(nivelJuego); // imprimirPuntuacion pinta cualquier numero
         tiempo1 = millis();
         if (tiempo1 >= (tiempo2 + 2000))
         {
@@ -1101,6 +1139,21 @@ void configuracion()
     // DIFICULTAD-VELOCIDAD
     // mapear los valores del potenciometro en un rango de numero del 1 al 10
     potenciometroIzq = map(analogRead(A0), 0, 1024, 1, 11);
+
+    // para no cambiar logica de pintado de barras
+    if(potenciometroIzq >= 0 && potenciometroIzq <= 2){
+      velocidad = 400;
+    }
+    else if(potenciometroIzq > 2 && potenciometroIzq <= 5){
+      velocidad = 300;
+    }
+    else if(potenciometroIzq > 5 && potenciometroIzq <= 9){
+      velocidad = 200;
+    }
+    else if(potenciometroIzq > 9){
+      velocidad = 150;
+    }
+    
     // VIDAS
     //  mapear los valores del potenciometro en un rango de numero del 3 al 10
     potenciometroDer = map(analogRead(A1), 0, 1024, 3, 11);
@@ -1121,7 +1174,8 @@ byte PausaXd[8][16] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 
 void MenuPausa()
 {
-    mostrarMatriz2(PausaXd);
+    //mostrarMatriz2(PausaXd);
+    imprimirPuntuacion(vidas);
     if (digitalRead(K) == LOW)
     {
         delay(1000);
@@ -1138,6 +1192,7 @@ void MenuPausa()
                 if (digitalRead(K) == LOW)
                 {
                     estadoActual = MENU_PRINCIPAL;
+                    nuevaPartida = true; // como regresara al manu principal, cuando vueva a jugar iniciara en el nivel 1
                 }
             }
         }
@@ -1277,8 +1332,8 @@ void setup()
 
 void loop()
 {
-    //MenuPrincipal();
-    // jugar();
+    MenuPrincipal();
+    //jugar();
     // configuracion();
-    imprimirPuntuacion(14);
+    //imprimirPuntuacion(28);
 }
