@@ -1113,6 +1113,7 @@ void mostrarMatrizEstadistica()
 ////////////////////////////////////////////////////////////// CONFIGURACION //////////////////////////////////////////////////////////////
 int potenciometroIzq = 0;
 int potenciometroDer = 0;
+bool flatConfiguracion = true;
 
 void pintarBarra(int posicionY, int longitudX)
 {
@@ -1275,6 +1276,7 @@ void MenuPrincipal()
         {
             // Botón 3 presionado: ir a OPCION_3
             estadoActual = CONFIG;
+            flatConfiguracion = true;
             delay(100);
         }
         break;
@@ -1308,7 +1310,10 @@ void MenuPrincipal()
         break;
     case CONFIG:
         Serial.println("CONFIG");
-        ledControl.clearDisplay(0);
+        if(flatConfiguracion){
+          ledControl.clearDisplay(0);
+          flatConfiguracion = false;
+        }
         configuracion();
         if (estadoBotonK == LOW)
         {
